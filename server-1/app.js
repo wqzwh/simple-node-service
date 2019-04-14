@@ -11,26 +11,33 @@ const serverHandle = (req, res) => {
   req.path = url.split('?')[0]
 
   // 解析query参数
-  req.query = querystring.parse(url.split('?')[0])
+  req.query = querystring.parse(url.split('?')[1])
 
   // 处理路由
-  const blogData = handlerBlogRouter(req, res)
-
-  if (blogData) {
-    res.end(JSON.stringify(blogData))
-    return
+  const blogResult = handlerBlogRouter(req, res)
+  if (blogResult) {
+    blogResult.then(blogData => {
+      if (blogData) {
+        res.end(JSON.stringify(blogData))
+      }
+      return
+    })
   }
 
-  const userData = handlerUserRouter(req, res)
-  if (userData) {
-    res.end(JSON.stringify(userData))
-    return
+  const userResult = handlerUserRouter(req, res)
+  if (userResult) {
+    userResult.then(userData => {
+      res.end(JSON.stringify(userData))
+      return
+    })
   }
 
   // 404
-  res.writeHead(404, { 'Content-type': 'text/plain' })
-  res.write('404 not found')
-  res.end()
+  if (!blogResult && !userData) {
+    res.writeHead(404, { 'Content-type': 'text/plain' })
+    res.write('404 not found')
+    res.end()
+  }
 }
 
 module.exports = serverHandle
