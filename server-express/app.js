@@ -1,4 +1,6 @@
 const createError = require('http-errors')
+const path = require('path')
+const fs = require('fs')
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
@@ -10,6 +12,21 @@ const blogRouter = require('./routes/blog')
 
 const app = express()
 
+const ENV = process.env.NODE_ENV
+
+if (ENV === 'dev') {
+  app.use(logger('dev'))
+} else {
+  const logFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(logFileName, {
+    flag: 'a'
+  })
+  app.use(
+    logger('combined', {
+      stream: writeStream
+    })
+  )
+}
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
