@@ -17,7 +17,7 @@ const loginCheck = req => {
 }
 
 router.get('/list', (req, res, next) => {
-  const loginCheckResult = loginCheck(req)
+  // const loginCheckResult = loginCheck(req)
   // if (loginCheckResult) {
   //   return loginCheck(req)
   // }
