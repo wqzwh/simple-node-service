@@ -1,10 +1,11 @@
 const createError = require('http-errors')
 const express = require('express')
-const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const session = require('express-session')
+const redisStore = require('connect-redis')(session)
 
-// const userRouter = require('./routes/user')
+const userRouter = require('./routes/user')
 const blogRouter = require('./routes/blog')
 
 const app = express()
@@ -13,8 +14,23 @@ app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+const redisClient = require('./db/redis')
+const sessionStore = new redisStore({
+  client: redisClient
+})
+app.use(
+  session({
+    secret: 'WEsd_123@#',
+    cookie: {
+      path: '/',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000
+    },
+    store: sessionStore
+  })
+)
 
-// app.use('/api/user', userRouter)
+app.use('/api/user', userRouter)
 app.use('/api/blog', blogRouter)
 
 // catch 404 and forward to error handler

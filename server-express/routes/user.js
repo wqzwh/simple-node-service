@@ -2,10 +2,9 @@ const express = require('express')
 const router = express.Router()
 const { login } = require('../controller/user')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
-const { set } = require('../db/redis')
 
-router.get('/login', (req, res, next) => {
-  const { username, password } = req.query
+router.post('/login', (req, res, next) => {
+  const { username, password } = req.body
   const result = login(username, password)
   return result.then(data => {
     if (data && data.username) {
@@ -13,10 +12,8 @@ router.get('/login', (req, res, next) => {
       req.session.username = data.username
       req.session.realname = data.realname
 
-      // 同步redis
-      set(req.sessionId, req.session)
-
       res.json(new SuccessModel())
+      return
     }
     res.json(new ErrorModel('登陆失败'))
   })
