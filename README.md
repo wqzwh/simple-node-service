@@ -2,7 +2,7 @@
 
 ## 简易流程
 
-<img src="https://raw.githubusercontent.com/wqzwh/simple-node-service/master/lc.png" width="700" />
+<img src="https://raw.githubusercontent.com/wqzwh/simple-node-service/master/lct.png" width="700" />
 
 ## 实现
 
