@@ -1,10 +1,10 @@
 {
-  "name": "backend",
+  "name": "simple-node-service",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=dev nodemon ./server-1/bin/www.js"
+    "dev": "cross-env NODE_ENV=dev nodemon ./server-native/bin/www.js"
   },
   "repository": {
     "type": "git",

@@ -14,7 +14,7 @@ const loginCheck = req => {
   }
 }
 
-const handleBlogRouter = (req, res) => {
+const handlerBlogRouter = (req, res) => {
   const method = req.method
 
   // 获取列表
@@ -89,4 +89,4 @@ const handleBlogRouter = (req, res) => {
   }
 }
 
-module.exports = handleBlogRouter
+module.exports = handlerBlogRouter

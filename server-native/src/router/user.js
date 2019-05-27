@@ -2,7 +2,7 @@ const { login } = require('../controller/user')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const { set } = require('../db/redis')
 
-const handleUserRouter = (req, res) => {
+const handlerUserRouter = (req, res) => {
   const method = req.method
 
   // 登陆
@@ -49,4 +49,4 @@ const handleUserRouter = (req, res) => {
   }
 }
 
-module.exports = handleUserRouter
+module.exports = handlerUserRouter
