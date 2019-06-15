@@ -5,8 +5,7 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const session = require('express-session')
-const redisStore = require('connect-redis')(session)
-
+const RedisStore = require('connect-redis')(session)
 const userRouter = require('./routes/user')
 const blogRouter = require('./routes/blog')
 
@@ -30,20 +29,43 @@ if (ENV === 'dev') {
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
-const redisClient = require('./db/redis')
-const sessionStore = new redisStore({
-  client: redisClient
+app.use(cookieParser('WEsd_123@#'))
+
+// 设置跨域访问
+app.all('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', req.headers.origin)
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
+  res.header('Access-Control-Allow-Credentials', true) //带cookies
+  res.header('X-Powered-By', ' 3.2.1')
+  // res.header("Content-Type", "application/json;charset=utf-8");
+  if (req.method == 'OPTIONS') {
+    res.send(200)
+  } else if (req.method == 'GET') {
+    req.body = req.query
+    next()
+  } else {
+    next()
+  }
 })
+
+const redisClient = require('./db/redis')
 app.use(
   session({
+    store: new RedisStore({
+      client: redisClient
+    }),
     secret: 'WEsd_123@#',
     cookie: {
       path: '/',
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000
     },
-    store: sessionStore
+    resave: false,
+    saveUninitialized: true // 是否保存未初始化的会话
   })
 )
 
