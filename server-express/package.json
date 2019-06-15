@@ -14,9 +14,13 @@
     "express-graphql": "^0.8.0",
     "express-session": "^1.16.1",
     "graphql": "^14.3.1",
+    "graphql-date": "^1.0.3",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
+    "lodash": "^4.17.11",
     "morgan": "~1.9.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
     "xss": "^1.0.6"
   },
   "devDependencies": {
