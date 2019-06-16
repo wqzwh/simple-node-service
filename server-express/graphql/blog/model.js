@@ -35,16 +35,22 @@ const BlogType = new GraphQLObjectType({
   }
 })
 
-// const BlogInput = new GraphQLInputObjectType({
-//   name: 'BlogInput',
-//   fields: {
-//     author: {
-//       type: GraphQLString
-//     }
-//   }
-// })
+const BlogInput = new GraphQLInputObjectType({
+  name: 'BlogInput',
+  fields: {
+    title: {
+      type: GraphQLString
+    },
+    content: {
+      type: GraphQLString
+    },
+    author: {
+      type: GraphQLString
+    }
+  }
+})
 
 module.exports = {
-  BlogType
-  // BlogInput
+  BlogType,
+  BlogInput
 }
