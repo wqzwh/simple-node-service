@@ -10,6 +10,16 @@
 - [express 实现](https://github.com/wqzwh/node-backend/tree/master/server-express)
 - [koa2 实现](https://github.com/wqzwh/node-backend/tree/master/server-koa2)
 
+## JWT 相关
+
+<img src="https://raw.githubusercontent.com/wqzwh/simple-node-service/master/jwt.png" width="500" />
+
+express 版本使用插件
+
+```
+npm i jsonwebtoken express-jwt -S
+```
+
 ## GraphQL 相关
 
 基本目录结构如下：
