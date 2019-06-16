@@ -9,6 +9,7 @@ const RedisStore = require('connect-redis')(session)
 const graphqlHTTP = require('express-graphql')
 const userRouter = require('./routes/user')
 const blogRouter = require('./routes/blog')
+const jwtRouter = require('./routes/jwt')
 const schema = require('./graphql/schema')
 
 const app = express()
@@ -71,6 +72,7 @@ app.use(
   })
 )
 
+app.use('/api', jwtRouter)
 app.use('/api/user', userRouter)
 app.use('/api/blog', blogRouter)
 app.use(
