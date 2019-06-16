@@ -9,8 +9,6 @@ const {
 } = require('graphql')
 const request = require('request-promise')
 const { getList } = require('../../controller/blog')
-const { SuccessModel, ErrorModel } = require('../../model/resModel')
-
 const { BlogType } = require('./model')
 const { HOST_CONF } = require('../../conf/db')
 
@@ -38,18 +36,18 @@ const Blog = {
     }
   },
   resolve(root, params, options) {
+    // 调用转发接口形式
     // const res = fetchBookByURL(
     //   `/api/blog/list?author=${params.author}&keyword=${params.keyword}`
     // )
     // return res.then(data => {
-    //   console.log(data.data)
     //   return data.data
     // })
+    // 直接操作数据库
     const author = params.author
     const keyword = params.keyword
     const result = getList(author, keyword)
     return result.then(listData => {
-      console.log(listData)
       return listData
     })
   }

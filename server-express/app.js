@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const session = require('express-session')
 const RedisStore = require('connect-redis')(session)
-const expressGraphql = require('express-graphql')
+const graphqlHTTP = require('express-graphql')
 const userRouter = require('./routes/user')
 const blogRouter = require('./routes/blog')
 const schema = require('./graphql/schema')
@@ -75,10 +75,11 @@ app.use('/api/user', userRouter)
 app.use('/api/blog', blogRouter)
 app.use(
   '/graphql',
-  expressGraphql({
+  graphqlHTTP((request, response, graphQLParams) => ({
     schema,
+    rootValue: { session: request.session },
     graphiql: true // 是否开启界面编辑
-  })
+  }))
 )
 
 // catch 404 and forward to error handler
