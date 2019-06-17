@@ -10,6 +10,14 @@
 - [express 实现](https://github.com/wqzwh/node-backend/tree/master/server-express)
 - [koa2 实现](https://github.com/wqzwh/node-backend/tree/master/server-koa2)
 
+## 运行说明
+
+本项目使用的数据库是 mysql 和 redis，所以必须保证 mysql 和 redis 本地运行了才能执行下面命令
+
+```
+npm run dev
+```
+
 ## JWT 相关
 
 <img src="https://raw.githubusercontent.com/wqzwh/simple-node-service/master/jwt.png" width="500" />
@@ -58,6 +66,9 @@ query {
     content,
     createtime,
     author
+  }
+  item: BlogItem(author:"澎湃新闻") {
+    title
   }
 }
 
