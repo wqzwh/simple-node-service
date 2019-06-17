@@ -35,7 +35,7 @@ const Blog = {
       defaultValue: ''
     }
   },
-  resolve(root, params, options) {
+  resolve(root, params, context, info) {
     // 调用转发接口形式
     // const res = fetchBookByURL(
     //   `/api/blog/list?author=${params.author}&keyword=${params.keyword}`
@@ -43,6 +43,7 @@ const Blog = {
     // return res.then(data => {
     //   return data.data
     // })
+
     // 直接操作数据库
     const author = params.author
     const keyword = params.keyword
@@ -53,6 +54,34 @@ const Blog = {
   }
 }
 
+const BlogItem = {
+  type: BlogType,
+  args: {
+    author: {
+      type: GraphQLString,
+      defaultValue: ''
+    },
+    keyword: {
+      type: GraphQLString,
+      defaultValue: ''
+    }
+  },
+  resolve(root, params, context, info) {
+    // 直接操作数据库
+    const author = params.author
+    const keyword = params.keyword
+    const result = getList(author, keyword)
+    return result.then(listData => {
+      for (const v of listData) {
+        if (v.author === params.author || v.keyword === params.author) {
+          return v
+        }
+      }
+    })
+  }
+}
+
 module.exports = {
-  Blog
+  Blog,
+  BlogItem
 }

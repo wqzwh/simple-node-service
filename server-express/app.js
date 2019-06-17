@@ -80,7 +80,8 @@ app.use(
   graphqlHTTP((request, response, graphQLParams) => ({
     schema,
     rootValue: { session: request.session },
-    graphiql: true // 是否开启界面编辑
+    graphiql: true, // 是否开启界面编辑
+    context: { token: request.header.authorization }
   }))
 )
 
