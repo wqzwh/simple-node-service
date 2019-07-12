@@ -6,7 +6,7 @@
 
 ## 实现
 
-- [原生实现](https://github.com/wqzwh/node-backend/tree/master/server-1)
+- [原生实现](https://github.com/wqzwh/node-backend/tree/master/server-native)
 - [express 实现](https://github.com/wqzwh/node-backend/tree/master/server-express)
 - [koa2 实现](https://github.com/wqzwh/node-backend/tree/master/server-koa2)
 
