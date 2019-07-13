@@ -1,12 +1,11 @@
 const { ErrorModel } = require('../model/resModel')
 
-const loginCheck = (ctx, next) => {
-  const { request } = ctx
-  if (request.session.username) {
-    next()
+const loginCheck = async (ctx, next) => {
+  if (ctx.session.username) {
+    await next()
     return
   }
-  ctx = new ErrorModel('未登录')
+  ctx.body = new ErrorModel('未登录')
 }
 
 module.exports = loginCheck

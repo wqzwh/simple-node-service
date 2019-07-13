@@ -12,58 +12,44 @@ const loginCheck = require('../middleware/loginCheck')
 router.prefix('/api/blog')
 
 router.get('/list', async (ctx, next) => {
-  const { request } = ctx
-  const author = request.query.author || ''
-  const keyword = request.query.keyword || ''
-  const result = getList(author, keyword)
-  return result.then(listData => {
-    ctx.body = new SuccessModel(listData)
-  })
+  const author = ctx.query.author || ''
+  const keyword = ctx.query.keyword || ''
+  const listData = await getList(author, keyword)
+  ctx.body = new SuccessModel(listData)
 })
 
-router.get('/detail', (ctx, next) => {
-  const { request } = ctx
-  const id = request.query.id || ''
-  const result = getDetail(id)
-  return result.then(detailData => {
-    ctx.body = new SuccessModel(detailData)
-  })
+router.get('/detail', async (ctx, next) => {
+  const id = ctx.query.id || ''
+  const detailData = await getDetail(id)
+  ctx.body = new SuccessModel(detailData)
 })
 
-router.post('/new', loginCheck, (ctx, next) => {
-  const { request } = ctx
-  request.body.author = request.session.username
-  const result = newBlog(request.body)
-  return result.then(newData => {
-    ctx.body = new SuccessModel(newData)
-  })
+router.post('/new', loginCheck, async (ctx, next) => {
+  const body = ctx.request.body
+  body.author = ctx.session.username
+  const newData = await newBlog(body)
+  ctx.body = new SuccessModel(newData)
 })
 
-router.post('/update', loginCheck, (ctx, next) => {
-  const { request } = ctx
-  const id = request.query.id || ''
-  const result = updateBlog(id, request.body)
-  return result.then(ret => {
-    if (ret) {
-      ctx.body = new SuccessModel()
-    } else {
-      ctx.body = new ErrorModel('更新失败')
-    }
-  })
+router.post('/update', loginCheck, async (ctx, next) => {
+  const id = ctx.query.id || ''
+  const ret = await updateBlog(id, ctx.request.body)
+  if (ret) {
+    ctx.body = new SuccessModel()
+  } else {
+    ctx.body = new ErrorModel('更新失败')
+  }
 })
 
-router.post('/del', loginCheck, (ctx, next) => {
-  const { request } = ctx
-  const id = request.query.id
-  const author = request.session.username
-  const result = delBlog(id, author)
-  return result.then(ret => {
-    if (ret) {
-      ctx.body = new SuccessModel()
-    } else {
-      ctx.body = new ErrorModel('删除失败')
-    }
-  })
+router.post('/del', loginCheck, async (ctx, next) => {
+  const id = ctx.query.id
+  const author = ctx.session.username
+  const ret = await delBlog(id, author)
+  if (ret) {
+    ctx.body = new SuccessModel()
+  } else {
+    ctx.body = new ErrorModel('删除失败')
+  }
 })
 
 module.exports = router
