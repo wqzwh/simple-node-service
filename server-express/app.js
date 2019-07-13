@@ -29,7 +29,7 @@ if (ENV === 'dev') {
     })
   )
 }
-app.use(logger('dev'))
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser('WEsd_123@#'))
