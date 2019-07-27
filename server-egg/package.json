@@ -1,0 +1,17 @@
+{
+  "name": "server-egg",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "egg-bin dev"
+  },
+  "author": "wangqi",
+  "license": "ISC",
+  "dependencies": {
+    "egg": "^2.22.2"
+  },
+  "devDependencies": {
+    "egg-bin": "^4.13.0"
+  },
+  "description": ""
+}
