@@ -12,6 +12,7 @@ const fs = require('fs')
 const requireDirectory = require('require-directory')
 const Router = require('koa-router')
 const { REDIS_CONF } = require('./conf/db')
+const catchError = require('./middleware/exception')
 const router = new Router()
 
 // error handler
@@ -23,6 +24,7 @@ app.use(
     enableTypes: ['json', 'form', 'text']
   })
 )
+app.use(catchError)
 app.use(json())
 app.use(logger())
 

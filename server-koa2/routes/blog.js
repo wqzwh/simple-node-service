@@ -8,18 +8,31 @@ const {
 } = require('../controller/blog')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const loginCheck = require('../middleware/loginCheck')
+const { Validator } = require('../validators/validator')
 
 router.prefix('/api/blog')
 
-router.get('/list', async (ctx, next) => {
-  const author = ctx.query.author || ''
-  const keyword = ctx.query.keyword || ''
+router.get('/list/:id', async (ctx, next) => {
+  const v = new Validator(ctx, {
+    'query.author': [
+      ['isLength', 'author字符串长度不能大于4', { min: 0, max: 4 }],
+      ['isLength', 'author字符串长度不能大于10', { min: 0, max: 10 }]
+    ],
+    'query.keyword': [
+      ['isLength', 'keyword字符串长度不能大于4', { min: 0, max: 4 }]
+    ]
+  })
+  const author = v.get('query.author') || ''
+  const keyword = v.get('query.keyword') || ''
   const listData = await getList(author, keyword)
   ctx.body = new SuccessModel(listData)
 })
 
 router.get('/detail', async (ctx, next) => {
-  const id = ctx.query.id || ''
+  const v = new Validator(ctx, {
+    'query.id': [['isLength', 'id字符串长度不能大于4', { min: 0, max: 4 }]]
+  })
+  const id = v.get('query.id') || ''
   const detailData = await getDetail(id)
   ctx.body = new SuccessModel(detailData)
 })
