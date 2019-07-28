@@ -9,10 +9,10 @@ const redisStore = require('koa-redis')
 const koaMorgan = require('koa-morgan')
 const path = require('path')
 const fs = require('fs')
+const requireDirectory = require('require-directory')
+const Router = require('koa-router')
 const { REDIS_CONF } = require('./conf/db')
-
-const blog = require('./routes/blog')
-const users = require('./routes/users')
+const router = new Router()
 
 // error handler
 onerror(app)
@@ -67,9 +67,14 @@ app.use(
   })
 )
 
-// routes
-app.use(blog.routes(), blog.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+// 自动匹配路由方法
+requireDirectory(module, `${process.cwd()}/routes`, { visit: loadRouters })
+function loadRouters(obj) {
+  if (obj instanceof Router) {
+    app.use(obj.routes())
+  }
+}
+app.use(router.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
