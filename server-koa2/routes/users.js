@@ -2,42 +2,12 @@ const router = require('koa-router')()
 const { login } = require('../controller/user')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const { Validator } = require('../validators/validator')
+const { RegisterValidators } = require('../validators/registerValidators')
 
 router.prefix('/api/user')
 
 router.post('/register', async (ctx, next) => {
-  const v = new Validator(
-    ctx,
-    {
-      'body.email': [['isEmail', 'email不符合规则']],
-      'body.nickname': [
-        ['isLength', 'nickname字符串长度不能大于20', { min: 0, max: 20 }]
-      ],
-      'body.password1': [
-        ['isLength', 'password1字符串长度不能大于30', { min: 6, max: 30 }],
-        [
-          'matches',
-          'password1密码不符合规则',
-          '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]'
-        ]
-      ],
-      'body.password2': [
-        ['isLength', 'password2字符串长度不能大于30', { min: 6, max: 30 }],
-        [
-          'matches',
-          'password2密码不符合规则',
-          '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]'
-        ]
-      ]
-    },
-    ({ body }) => {
-      const pw1 = body.password1
-      const pw2 = body.password2
-      if (pw1 !== pw2) {
-        throw new Error('两个密码必须相同')
-      }
-    }
-  )
+  const v = new RegisterValidators().checkParams(ctx)
   const email = v.get('body.email')
   const nickname = v.get('body.nickname')
   const password1 = v.get('body.password1')

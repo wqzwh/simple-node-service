@@ -1,44 +1,59 @@
-const { get, last, cloneDeep } = require('lodash')
+const { get, last, cloneDeep, isEmpty } = require('lodash')
 const validator = require('validator')
 const { ParameterException } = require('../model/exceptionType')
 
 class Validator {
-  constructor(ctx, options, cb) {
+  constructor() {
     this.data = {}
-    this.options = options
-    this.cb = cb
-    // 创建对象保存参数
-    this.data = cloneDeep(this.createParams(ctx))
-
-    this.getOptionsAttr(options)
+    this.errors = []
   }
 
-  getOptionsAttr(options) {
-    // 遍历options的属性值
-    const errors = []
-    for (const v in options) {
-      for (const vv of options[v]) {
-        if (
-          !validator[vv[0]](
-            this.get(v, false),
-            vv[2] || { allow_display_name: false }
-          )
-        ) {
-          errors.push(vv[1])
-        }
-      }
+  checkParams(ctx) {
+    // 创建对象保存参数
+    this.data = cloneDeep(this.createParams(ctx))
+    let _result = {}
+
+    // 遍历this.data得出参数数据
+    for (const v in this.data) {
+      _result = this.get(v)
     }
 
-    if (this.cb) {
+    // 遍历参数对象进行校验收集错误
+    for (const v in _result) {
+      this.getValidator(this[v], _result[v])
+      this.checkCallback(`check${v}`)
+    }
+
+    if (!this.errors.length) return this
+    const error = new ParameterException(this.errors)
+    throw error
+  }
+
+  /**
+   *
+   * @param {*} functionName 自定义函数方法名称
+   */
+  checkCallback(functionName) {
+    if (typeof this[functionName] === 'function') {
       try {
-        this.cb(this.data)
-      } catch (err) {
-        errors.push(err.message)
+        this[functionName](this.data)
+      } catch (error) {
+        this.errors.push(error.message)
       }
     }
-    if (!errors.length) return
-    const error = new ParameterException(errors)
-    throw error
+  }
+
+  /**
+   *
+   * @param {*} rules 每个变量对应的规则集合， 数组类型
+   * @param {*} result 每个变量对应的值
+   */
+  getValidator(rules, result) {
+    for (const v of rules) {
+      if (!validator[v[0]](result, v[2] || { allow_display_name: false })) {
+        this.errors.push(v[1])
+      }
+    }
   }
 
   createParams(ctx) {

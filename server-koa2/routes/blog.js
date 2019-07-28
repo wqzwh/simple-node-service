@@ -8,20 +8,12 @@ const {
 } = require('../controller/blog')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const loginCheck = require('../middleware/loginCheck')
-const { Validator } = require('../validators/validator')
+const { BlogListValidators } = require('../validators/blogListValidators')
 
 router.prefix('/api/blog')
 
 router.get('/list/:id', async (ctx, next) => {
-  const v = new Validator(ctx, {
-    'query.author': [
-      ['isLength', 'author字符串长度不能大于4', { min: 0, max: 4 }],
-      ['isLength', 'author字符串长度不能大于10', { min: 0, max: 10 }]
-    ],
-    'query.keyword': [
-      ['isLength', 'keyword字符串长度不能大于4', { min: 0, max: 4 }]
-    ]
-  })
+  const v = new BlogListValidators().checkParams(ctx)
   const author = v.get('query.author') || ''
   const keyword = v.get('query.keyword') || ''
   const listData = await getList(author, keyword)
