@@ -1,4 +1,5 @@
 const { Validator } = require('./validator')
+const User = require('../models/user')
 
 class RegisterValidators extends Validator {
   constructor() {
@@ -18,11 +19,23 @@ class RegisterValidators extends Validator {
     this.password2 = this.password1
   }
 
-  checkpassword1({ body }) {
+  checkPassword1({ body }) {
     const pw1 = body.password1
     const pw2 = body.password2
     if (pw1 !== pw2) {
       throw new Error('两个密码必须相同')
+    }
+  }
+
+  async checkEmail({ body }) {
+    const email = body.email
+    const userEmail = await User.findOne({
+      where: {
+        email
+      }
+    })
+    if (userEmail) {
+      throw new Error('email已经存在')
     }
   }
 }

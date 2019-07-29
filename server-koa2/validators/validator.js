@@ -1,4 +1,4 @@
-const { get, last, cloneDeep, isEmpty } = require('lodash')
+const { get, last, cloneDeep, capitalize } = require('lodash')
 const validator = require('validator')
 const { ParameterException } = require('../model/exceptionType')
 
@@ -8,7 +8,7 @@ class Validator {
     this.errors = []
   }
 
-  checkParams(ctx) {
+  async checkParams(ctx) {
     // 创建对象保存参数
     this.data = cloneDeep(this.createParams(ctx))
     let _result = {}
@@ -21,7 +21,7 @@ class Validator {
     // 遍历参数对象进行校验收集错误
     for (const v in _result) {
       this.getValidator(this[v], _result[v])
-      this.checkCallback(`check${v}`)
+      await this.checkCallback(`check${capitalize(v)}`)
     }
 
     if (!this.errors.length) return this
@@ -33,10 +33,14 @@ class Validator {
    *
    * @param {*} functionName 自定义函数方法名称
    */
-  checkCallback(functionName) {
+  async checkCallback(functionName) {
     if (typeof this[functionName] === 'function') {
       try {
-        this[functionName](this.data)
+        if (this[functionName](this.data)) {
+          await this[functionName](this.data)
+        } else {
+          this[functionName](this.data)
+        }
       } catch (error) {
         this.errors.push(error.message)
       }

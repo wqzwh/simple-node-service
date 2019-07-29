@@ -13,13 +13,13 @@ const sequelize = new Sequelize(
     logging: true,
     define: {
       // true时则会创建 update_time create_time delete_time
-      timestamps: false
+      timestamps: true
     }
   }
 )
 
 sequelize.sync({
-  force: true
+  force: false
 })
 
 module.exports = {
