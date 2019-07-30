@@ -1,9 +1,31 @@
 const { Sequelize, Model } = require('sequelize')
 const bcrypt = require('bcryptjs')
-
 const { sequelize } = require('../db/sequelize')
+const {
+  NotFoundException,
+  AuthFailed401Exception
+} = require('../model/exceptionType')
 
-class User extends Model {}
+class User extends Model {
+  static async verifyEmailPassword(email, plainPassword) {
+    const user = await User.findOne({
+      where: {
+        email
+      }
+    })
+
+    if (!user) {
+      throw new NotFoundException('账号不存在')
+    }
+
+    const correct = bcrypt.compareSync(plainPassword, user.password)
+    if (!correct) {
+      throw new AuthFailed401Exception('密码不正确')
+    }
+
+    return user
+  }
+}
 
 User.init(
   {

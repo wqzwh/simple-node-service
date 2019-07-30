@@ -17,6 +17,16 @@ class ParameterException extends ExceptionBase {
   }
 }
 
+// 401错误类型
+class AuthFailed401Exception extends ExceptionBase {
+  constructor(msg = '授权失败', errorCode = 10004) {
+    super()
+    this.msg = msg
+    this.errorCode = errorCode
+    this.code = 404
+  }
+}
+
 // 404错误类型
 class NotFoundException extends ExceptionBase {
   constructor(msg = '暂无资源', errorCode = 10001) {
@@ -41,5 +51,6 @@ module.exports = {
   ExceptionBase,
   ParameterException,
   NotFoundException,
-  Success201Exception
+  Success201Exception,
+  AuthFailed401Exception
 }

@@ -73,8 +73,13 @@ class Validator {
    */
   getValidator(rules, result) {
     // rules 中如果包含isOptional类型，则先判断是否有传值，如果没有传值，则直接跳出循环，反之则使用传递的值进行校验
+    // 如果rules类型不是数组则直接返回，不做检验
+    if (Object.prototype.toString.call(rules) !== '[object Array]') return
     for (const v of rules) {
-      if (v[0] === 'isOptional' && result === null) {
+      if (
+        (v[0] === 'isOptional' && result === null) ||
+        (v[0] === 'isOptional' && result !== null)
+      ) {
         break
       } else if (result === null) {
         v[1] ? this.errors.push(v[1]) : ''
