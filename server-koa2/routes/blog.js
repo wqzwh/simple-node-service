@@ -9,10 +9,10 @@ const {
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const loginCheck = require('../middleware/loginCheck')
 const { BlogListValidators } = require('../validators/blogListValidators')
-
+const Auth = require('../middleware/auth')
 router.prefix('/api/blog')
 
-router.get('/list/:id', async (ctx, next) => {
+router.get('/list/:id', new Auth().m, async (ctx, next) => {
   const v = new BlogListValidators().checkParams(ctx)
   const author = v.get('query.author') || ''
   const keyword = v.get('query.keyword') || ''

@@ -17,6 +17,16 @@ class ParameterException extends ExceptionBase {
   }
 }
 
+// 403禁止访问
+class Forbbiden403Exception extends ExceptionBase {
+  constructor(msg = '禁止访问', errorCode = 100075) {
+    super()
+    this.msg = msg
+    this.errorCode = errorCode
+    this.code = 403
+  }
+}
+
 // 401错误类型
 class AuthFailed401Exception extends ExceptionBase {
   constructor(msg = '授权失败', errorCode = 10004) {
@@ -52,5 +62,6 @@ module.exports = {
   ParameterException,
   NotFoundException,
   Success201Exception,
-  AuthFailed401Exception
+  AuthFailed401Exception,
+  Forbbiden403Exception
 }

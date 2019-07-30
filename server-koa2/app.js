@@ -11,7 +11,7 @@ const path = require('path')
 const fs = require('fs')
 const requireDirectory = require('require-directory')
 const Router = require('koa-router')
-const { REDIS_CONF } = require('./conf/db')
+const { REDIS_CONF, SECURITY } = require('./conf/db')
 const catchError = require('./middleware/exception')
 const router = new Router()
 
@@ -53,7 +53,7 @@ if (ENV === 'dev') {
 }
 
 // session配置
-app.keys = ['WEsd_123@#']
+app.keys = [SECURITY.secretKey]
 app.use(
   session({
     // 配置cookie
