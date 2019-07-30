@@ -19,14 +19,14 @@ class BaseModel {
 class SuccessModel extends BaseModel {
   constructor(data, msg) {
     super(data, msg)
-    this.erron = 0
+    this.errorCode = 0
   }
 }
 
 class ErrorModel extends BaseModel {
   constructor(data, msg) {
     super(data, msg)
-    this.erron = -1
+    this.errorCode = -1
   }
 }
 

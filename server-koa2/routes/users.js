@@ -2,6 +2,7 @@ const router = require('koa-router')()
 const { login } = require('../controller/user')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const { RegisterValidators } = require('../validators/registerValidators')
+const { Success201Exception } = require('../model/exceptionType')
 const User = require('../models/user')
 
 router.prefix('/api/user')
@@ -10,14 +11,14 @@ router.post('/register', async (ctx, next) => {
   const v = await new RegisterValidators().checkParams(ctx)
   const email = v.get('body.email')
   const nickname = v.get('body.nickname')
-  const password1 = v.get('body.password1')
-  const password2 = v.get('body.password1')
+  const password2 = v.get('body.password2')
   const user = {
     email,
     nickname,
-    password: password1
+    password: password2
   }
-  const r = await User.create(user)
+  await User.create(user)
+  throw new Success201Exception()
 })
 
 router.post('/login', async (ctx, next) => {

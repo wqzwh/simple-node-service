@@ -12,23 +12,34 @@ class ParameterException extends ExceptionBase {
   constructor(msg = '', errorCode = 10001) {
     super()
     this.msg = msg
-    this.errorCode = 10001
+    this.errorCode = errorCode
     this.code = 400
   }
 }
 
 // 404错误类型
 class NotFoundException extends ExceptionBase {
-  constructor(msg = '', errorCode = 10001) {
+  constructor(msg = '暂无资源', errorCode = 10001) {
     super()
-    this.msg = '暂无资源'
-    this.errorCode = 40001
+    this.msg = msg
+    this.errorCode = errorCode
     this.code = 404
+  }
+}
+
+// 201类型
+class Success201Exception extends ExceptionBase {
+  constructor(msg = '成功', errorCode = 0) {
+    super()
+    this.msg = msg
+    this.errorCode = errorCode
+    this.code = 201
   }
 }
 
 module.exports = {
   ExceptionBase,
   ParameterException,
-  NotFoundException
+  NotFoundException,
+  Success201Exception
 }

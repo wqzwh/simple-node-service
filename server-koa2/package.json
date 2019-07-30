@@ -10,6 +10,7 @@
     "cdb": "cross-env NODE_ENV=dev node ./models/user.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cross-env": "^5.2.0",
     "crypto": "^1.0.1",
     "debug": "^2.6.3",
