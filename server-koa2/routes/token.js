@@ -6,6 +6,7 @@ const { ParameterException } = require('../model/exceptionType')
 const { generateToken } = require('../utils/util')
 const { SuccessModel } = require('../model/resModel')
 const Auth = require('../middleware/auth')
+const WXManager = require('../services/wx')
 
 router.prefix('/api/token')
 
@@ -18,6 +19,7 @@ router.post('/', async (ctx, next) => {
       break
 
     case loginType.USER_MINT_PROGRAM:
+      token = await WXManager.codeToToken(v.get('body.account'))
       break
 
     default:
