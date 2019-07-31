@@ -11,6 +11,7 @@ const loginType = {
   USER_MINT_PROGRAM: 100,
   USER_EMAIL: 101,
   USER_PHONE: 102,
+  ADMIN_EMAIL: 116,
   isThisType
 }
 

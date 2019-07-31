@@ -5,6 +5,8 @@ const User = require('../models/user')
 const { ParameterException } = require('../model/exceptionType')
 const { generateToken } = require('../utils/util')
 const { SuccessModel } = require('../model/resModel')
+const Auth = require('../middleware/auth')
+
 router.prefix('/api/token')
 
 router.post('/', async (ctx, next) => {
@@ -26,7 +28,7 @@ router.post('/', async (ctx, next) => {
 
 async function emailLogin(account, secret) {
   const user = await User.verifyEmailPassword(account, secret)
-  return generateToken(user.id, 2)
+  return generateToken(user.id, Auth.USER)
 }
 
 module.exports = router

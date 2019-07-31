@@ -3,7 +3,11 @@ const { Forbbiden403Exception } = require('../model/exceptionType')
 const { SECURITY } = require('../conf/db')
 
 class Auth {
-  constructor() {}
+  constructor(level = 1) {
+    this.level = level
+    Auth.USER = 8
+    Auth.ADMIN = 16
+  }
 
   get m() {
     return async (ctx, next) => {
@@ -12,15 +16,20 @@ class Auth {
       if (!userToken || !userToken.name) {
         throw new Forbbiden403Exception(errMsg)
       }
-
+      let devode
       try {
-        const devode = jwt.verify(userToken.name, SECURITY.secretKey)
+        devode = jwt.verify(userToken.name, SECURITY.secretKey)
       } catch (error) {
         // 令牌不合法
         // 令牌过期
         if (error.name === 'TokenExpiredError') {
           errMsg = 'token令牌过期'
         }
+        throw new Forbbiden403Exception(errMsg)
+      }
+
+      if (devode.scope < this.level) {
+        errMsg = '权限不足'
         throw new Forbbiden403Exception(errMsg)
       }
 
