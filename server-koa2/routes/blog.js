@@ -8,18 +8,23 @@ const {
 } = require('../controller/blog')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const loginCheck = require('../middleware/loginCheck')
-
+const { BlogListValidators } = require('../validators/blogListValidators')
+const Auth = require('../middleware/auth')
 router.prefix('/api/blog')
 
-router.get('/list', async (ctx, next) => {
-  const author = ctx.query.author || ''
-  const keyword = ctx.query.keyword || ''
+router.get('/list/:id', new Auth().m, async (ctx, next) => {
+  const v = new BlogListValidators().checkParams(ctx)
+  const author = v.get('query.author') || ''
+  const keyword = v.get('query.keyword') || ''
   const listData = await getList(author, keyword)
   ctx.body = new SuccessModel(listData)
 })
 
 router.get('/detail', async (ctx, next) => {
-  const id = ctx.query.id || ''
+  const v = new Validator(ctx, {
+    'query.id': [['isLength', 'id字符串长度不能大于4', { min: 0, max: 4 }]]
+  })
+  const id = v.get('query.id') || ''
   const detailData = await getDetail(id)
   ctx.body = new SuccessModel(detailData)
 })

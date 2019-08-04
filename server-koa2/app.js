@@ -9,10 +9,11 @@ const redisStore = require('koa-redis')
 const koaMorgan = require('koa-morgan')
 const path = require('path')
 const fs = require('fs')
-const { REDIS_CONF } = require('./conf/db')
-
-const blog = require('./routes/blog')
-const users = require('./routes/users')
+const requireDirectory = require('require-directory')
+const Router = require('koa-router')
+const { REDIS_CONF, SECURITY } = require('./conf/db')
+const catchError = require('./middleware/exception')
+const router = new Router()
 
 // error handler
 onerror(app)
@@ -23,6 +24,7 @@ app.use(
     enableTypes: ['json', 'form', 'text']
   })
 )
+app.use(catchError)
 app.use(json())
 app.use(logger())
 
@@ -51,7 +53,7 @@ if (ENV === 'dev') {
 }
 
 // session配置
-app.keys = ['WEsd_123@#']
+app.keys = [SECURITY.secretKey]
 app.use(
   session({
     // 配置cookie
@@ -67,9 +69,14 @@ app.use(
   })
 )
 
-// routes
-app.use(blog.routes(), blog.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+// 自动匹配路由方法
+requireDirectory(module, `${process.cwd()}/routes`, { visit: loadRouters })
+function loadRouters(obj) {
+  if (obj instanceof Router) {
+    app.use(obj.routes())
+  }
+}
+app.use(router.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
