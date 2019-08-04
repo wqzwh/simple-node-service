@@ -1,5 +1,6 @@
 const router = require('koa-router')()
 const { TokenValidators } = require('../validators/tokenValidators')
+const { NotEmptyValidator } = require('../validators/notEmptyValidator')
 const loginType = require('../constant/loginType')
 const User = require('../models/user')
 const { ParameterException } = require('../model/exceptionType')
@@ -32,5 +33,12 @@ async function emailLogin(account, secret) {
   const user = await User.verifyEmailPassword(account, secret)
   return generateToken(user.id, Auth.USER)
 }
+
+// 验证token
+router.post('/verify', async (ctx, next) => {
+  const v = await new NotEmptyValidator().checkParams(ctx)
+  const token = Auth.verifyToken(v.get('body.account'))
+  ctx.body = new SuccessModel({ token })
+})
 
 module.exports = router
