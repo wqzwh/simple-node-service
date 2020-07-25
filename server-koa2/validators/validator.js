@@ -16,7 +16,9 @@ class Validator {
 
     // 遍历this.data得出参数数据
     for (const v in this.data) {
-      _result = this.get(v)
+      if (v !== 'headers') {
+        _result = Object.assign({}, _result, this.get(v))
+      }
     }
 
     for (const v in this) {

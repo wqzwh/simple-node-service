@@ -3,7 +3,7 @@ const { login } = require('../controller/user')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const { RegisterValidators } = require('../validators/registerValidators')
 const { Success201Exception } = require('../model/exceptionType')
-const User = require('../models/user')
+const User = require('../../models/models-rec-realtime')
 
 router.prefix('/api/user')
 

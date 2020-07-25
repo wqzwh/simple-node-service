@@ -20,9 +20,9 @@ if (env === 'dev') {
   MYSQL_CONF = {
     host: '127.0.0.1',
     user: 'root',
-    password: 'root123456',
+    password: '123456',
     port: '3306',
-    database: 'myblog',
+    database: 'idata',
     insecureAuth: true
   }
 
@@ -36,9 +36,9 @@ if (env === 'production') {
   MYSQL_CONF = {
     host: '127.0.0.1',
     user: 'root',
-    password: 'root123456',
+    password: '123456',
     port: '3306',
-    database: 'myblog',
+    database: 'idata',
     insecureAuth: true
   }
 

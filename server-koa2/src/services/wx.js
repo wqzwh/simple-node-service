@@ -2,7 +2,7 @@ const util = require('util')
 const axios = require('axios')
 const { WX } = require('../conf/db')
 const { AuthFailed401Exception } = require('../model/exceptionType')
-const { User } = require('../models/user')
+const { User } = require('../../models/models-rec-realtime')
 const { generateToken } = require('../utils/util')
 const { Auth } = require('../middleware/auth')
 class WXManager {

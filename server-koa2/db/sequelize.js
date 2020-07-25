@@ -13,7 +13,7 @@ const sequelize = new Sequelize(
     logging: true,
     define: {
       // true时则会创建 update_time create_time delete_time
-      timestamps: true
+      timestamps: false
     }
   }
 )

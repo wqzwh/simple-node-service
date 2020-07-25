@@ -1,7 +1,6 @@
 const Koa = require('koa')
 const app = new Koa()
 const json = require('koa-json')
-const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const session = require('koa-generic-session')
@@ -15,9 +14,6 @@ const { REDIS_CONF, SECURITY } = require('./conf/db')
 const catchError = require('./middleware/exception')
 const router = new Router()
 
-// error handler
-onerror(app)
-
 // middlewares
 app.use(
   bodyparser({
@@ -29,10 +25,10 @@ app.use(json())
 app.use(logger())
 
 // logger
-app.use(async (ctx, next) => {
-  const start = new Date()
+app.use(async (ctx: any, next: any) => {
+  const start = new Date() as any
   await next()
-  const ms = new Date() - start
+  const ms = new Date() as any - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
@@ -71,7 +67,7 @@ app.use(
 
 // 自动匹配路由方法
 requireDirectory(module, `${process.cwd()}/routes`, { visit: loadRouters })
-function loadRouters(obj) {
+function loadRouters(obj: any) {
   if (obj instanceof Router) {
     app.use(obj.routes())
   }
@@ -79,7 +75,7 @@ function loadRouters(obj) {
 app.use(router.allowedMethods())
 
 // error-handling
-app.on('error', (err, ctx) => {
+app.on('error', (err: any, ctx: any) => {
   console.error('server error', err, ctx)
 })
 
