@@ -1,4 +1,4 @@
-const { ExceptionBase } = require('../model/exceptionType')
+const { ExceptionBase } = require('../helper/exception-type')
 
 const env = process.env.NODE_ENV // 环境变量
 const catchError = async (ctx, next) => {
@@ -10,18 +10,16 @@ const catchError = async (ctx, next) => {
       // 已知异常处理
       ctx.body = {
         msg: err.msg,
-        errorCode: err.errorCode,
+        code: err.code,
         request: `${ctx.method} ${ctx.path}`
       }
-      ctx.status = err.code
     } else {
       // 未知异常处理
       ctx.body = {
         msg: '未知异常',
-        errorCode: 90000,
+        code: 90000,
         request: `${ctx.method} ${ctx.path}`
       }
-      ctx.status = 500
     }
   }
 }

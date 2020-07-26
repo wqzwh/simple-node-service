@@ -66,7 +66,7 @@ app.use(
 )
 
 // 自动匹配路由方法
-requireDirectory(module, `${process.cwd()}/routes`, { visit: loadRouters })
+requireDirectory(module, `${process.cwd()}/src/routes`, { visit: loadRouters })
 function loadRouters(obj: any) {
   if (obj instanceof Router) {
     app.use(obj.routes())

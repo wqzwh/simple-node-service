@@ -1,6 +1,6 @@
 const { get, last, cloneDeep, isEmpty } = require('lodash')
 const validator = require('validator')
-const { ParameterException } = require('../model/exceptionType')
+const { ParameterException } = require('../helper/exception-type')
 
 class Validator {
   constructor() {

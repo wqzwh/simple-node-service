@@ -31,6 +31,7 @@
     "koa-router": "^7.1.1",
     "lodash": "^4.17.15",
     "mysql": "^2.17.1",
+    "mysql2": "^2.1.0",
     "redis": "^2.8.0",
     "require-directory": "^2.1.1",
     "sequelize": "^5.11.0",

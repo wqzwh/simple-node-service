@@ -1,12 +1,17 @@
 const { Sequelize, Model } = require('sequelize')
-const bcrypt = require('bcryptjs')
 const { sequelize } = require('../db/sequelize')
+const Op = Sequelize.Op
 
 class RecommendationRealTime extends Model {
   static async getOverview(startTime, endTime) {
     const overview = await RecommendationRealTime.findAll({
       where: {
-        date: startTime
+        date: {
+          [Op.and]: {
+            [Op.gte]: startTime,
+            [Op.lte]: endTime
+          }
+        }
       }
     })
     return overview

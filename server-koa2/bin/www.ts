@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const App = require('../app.ts');
+const App = require('../src/app.ts');
 const http = require('http');
 
 /**
